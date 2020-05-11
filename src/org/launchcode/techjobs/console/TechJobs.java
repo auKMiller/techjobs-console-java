@@ -3,6 +3,7 @@ package org.launchcode.techjobs.console;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.Set;
 
 /**
  * Created by LaunchCode
@@ -32,12 +33,10 @@ public class TechJobs {
         while (true) {
 
             String actionChoice = getUserSelection("View jobs by:", actionChoices);
-
-            if (actionChoice.equals("list")) {
+            if (actionChoice.toLowerCase().equals("list")) {
 
                 String columnChoice = getUserSelection("List", columnChoices);
-
-                if (columnChoice.equals("all")) {
+                if (columnChoice.toLowerCase().equals("all")) {
                     printJobs(JobData.findAll());
                 } else {
 
@@ -55,13 +54,12 @@ public class TechJobs {
 
                 // How does the user want to search (e.g. by skill or employer)
                 String searchField = getUserSelection("Search by:", columnChoices);
-
                 // What is their search term?
                 System.out.println("\nSearch term: ");
                 String searchTerm = in.nextLine();
 
                 if (searchField.equals("all")) {
-                    System.out.println("Search all fields not yet implemented.");
+                    System.out.println(JobData.findByValue(searchTerm));
                 } else {
                     printJobs(JobData.findByColumnAndValue(searchField, searchTerm));
                 }
@@ -110,7 +108,18 @@ public class TechJobs {
 
     // Print a list of jobs
     private static void printJobs(ArrayList<HashMap<String, String>> someJobs) {
-
-        System.out.println("printJobs is not implemented yet");
+        if(someJobs.size() == 0){
+            System.out.println("My message!");
+        }
+        for(int i = 0; i < someJobs.size(); i++){
+            HashMap<String,String> job = someJobs.get(i);
+             Set<String> columns = job.keySet();
+            for(String col:columns){
+               String info = job.get(col);
+              String toPrint = col + ": " + info;
+              System.out.println(toPrint);
+            }
+        System.out.println("*****");
+        }
     }
 }

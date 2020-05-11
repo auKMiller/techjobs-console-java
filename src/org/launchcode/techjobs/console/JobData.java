@@ -20,6 +20,7 @@ public class JobData {
     private static Boolean isDataLoaded = false;
 
     private static ArrayList<HashMap<String, String>> allJobs;
+    private static String value;
 
     /**
      * Fetch list of all values from loaded data,
@@ -36,8 +37,7 @@ public class JobData {
         ArrayList<String> values = new ArrayList<>();
 
         for (HashMap<String, String> row : allJobs) {
-            String aValue = row.get(field);
-
+            String aValue = row.get(field.toLowerCase());
             if (!values.contains(aValue)) {
                 values.add(aValue);
             }
@@ -74,14 +74,37 @@ public class JobData {
 
         for (HashMap<String, String> row : allJobs) {
 
-            String aValue = row.get(column);
-
+            String aValue = row.get(column.toLowerCase());
             if (aValue.contains(value)) {
                 jobs.add(row);
             }
         }
 
         return jobs;
+    }
+
+    public static ArrayList<HashMap<String,String>> findByValue(String value){
+        JobData.value = value;
+        loadData();
+
+          ArrayList<HashMap<String, String>> totalJobs = new ArrayList<>();
+
+        for (HashMap<String, String> row : allJobs) {
+            for(String column : row.keySet()){
+                String allTheThings = row.get(column);
+                if (allTheThings.toLowerCase().contains(value.toLowerCase())) {
+                    totalJobs.add(row);
+                } else if(totalJobs.contains(value)){
+                    System.out.println("Already contains search.");
+                }
+            }
+
+        }
+        if(!totalJobs.contains(value)){
+            System.out.println("Invalid entry.");
+        }
+
+        return totalJobs;
     }
 
     /**
